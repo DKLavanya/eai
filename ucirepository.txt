@@ -1,0 +1,13 @@
+import pandas as pd
+from sklearn.linear_model import Perceptron
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+cols = ['sepal_length','sepal_width','petal_length','petal_width','species']
+X, y = pd.read_csv(url, names=cols).iloc[:, :-1], pd.read_csv(url, names=cols).iloc[:, -1]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+for b in [False, True]:
+    model = Perceptron(fit_intercept=b).fit(X_train, y_train)
+    print(f"Accuracy with{'out' if not b else ''} bias:", accuracy_score(y_test, model.predict(X_test)))
